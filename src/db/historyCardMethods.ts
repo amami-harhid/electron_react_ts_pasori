@@ -1,5 +1,5 @@
 import type { HistoryCardRow } from './historyCardRow';
-import { db } from './db';
+import { db, type DbMethods } from './db';
 
 const selectInRoomHistoriesByDate = (date:string):Array<HistoryCardRow> => {
     const query = 
@@ -23,7 +23,7 @@ const selectInRoomHistoriesByDate = (date:string):Array<HistoryCardRow> => {
         throw err;
     }
 }
-export const historyCards = {
+export const historyCards:DbMethods = {
     selectInRoomHistoriesByDate: selectInRoomHistoriesByDate,
 }
 

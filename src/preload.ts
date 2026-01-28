@@ -1,1 +1,2 @@
-console.log("preloaded!");
+import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+

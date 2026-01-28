@@ -5,6 +5,9 @@ import type { CardRow } from './cardRow';
 const db_path = app.getPath('userData');
 
 export const db = new Database(`${db_path}/testdb.db`);
+export interface DbMethods {
+  [name: string]: CallableFunction;
+}
 import {cards} from './cardMethods';
 export const test = async () =>{
     cards.dropTable();

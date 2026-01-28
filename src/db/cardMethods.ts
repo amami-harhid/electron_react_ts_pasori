@@ -1,6 +1,6 @@
 import type { CardRow } from './cardRow';
 import { type TchangesInfo, getChangeInfo } from "./changesInfo";
-import { db } from './db';
+import { db, type DbMethods } from './db';
 
 const dropTable = () => {
     const query = `DROP TABLE IF EXISTS cards`
@@ -145,7 +145,8 @@ const deleteByFcno = (fcno:string):TchangesInfo => {
     }
 
 }
-export const cards = {
+
+export const cards:DbMethods = {
     dropTable: dropTable,
     createTable: createTable,
     selectAll: selectAll,

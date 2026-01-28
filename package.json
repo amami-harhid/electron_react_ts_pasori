@@ -50,6 +50,7 @@
     "better-sqlite3": "^12.6.2",
     "electron-log": "^5.4.3",
     "electron-store": "^11.0.2",
+    "material-react-table": "^3.2.1",
     "nfc-pcsc": "^0.8.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"

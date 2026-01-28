@@ -3,7 +3,7 @@ import type { CardRow } from './cardRow';
 import { cards } from './cardMethods';
 import { type TchangesInfo, getChangeInfo } from "./changesInfo";
 import { dateUtils } from '../utils/dateUtils';
-import { db } from './db';
+import { db, type DbMethods } from './db';
 
 const dropTable = () => {
     const query = `DROP TABLE IF EXISTS histories`
@@ -204,7 +204,7 @@ const setTodayInRoomByIdm = (idm:string):TchangesInfo => {
         }
     }
 }
-export const histories = {
+export const histories:DbMethods = {
     dropTable: dropTable,
     createTable: createTable,
     deleteByFcnoDate: deleteByFcnoDate,
