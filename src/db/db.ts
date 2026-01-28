@@ -5,10 +5,10 @@ import type { CardRow } from './cardRow';
 const db_path = app.getPath('userData');
 
 export const db = new Database(`${db_path}/testdb.db`);
-import {cards} from './cards';
+import {cards} from './cardMethods';
 export const test = async () =>{
-    cards.dropCards();
-    cards.createCards();
+    cards.dropTable();
+    cards.createTable();
     const info01 = cards.deleteByFcno('12345');
     console.log("info01=",info01);
     const info02 = cards.deleteByFcno('55555');

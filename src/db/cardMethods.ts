@@ -1,9 +1,8 @@
-import Database from "better-sqlite3";
 import type { CardRow } from './cardRow';
-import type { ChangesInfo } from "./changesInfo";
+import { type TchangesInfo, getChangeInfo } from "./changesInfo";
 import { db } from './db';
 
-const dropCards = () => {
+const dropTable = () => {
     const query = `DROP TABLE IF EXISTS cards`
     try{
         const dropQuery = db.prepare(query);
@@ -14,7 +13,7 @@ const dropCards = () => {
         throw err;
     }
 }
-const createCards = ()=>{
+const createTable = ()=>{
     const query =             
             `CREATE TABLE
             IF NOT EXISTS cards
@@ -25,7 +24,7 @@ const createCards = ()=>{
                 [kana] text,
                 [mail] text,
                 [in_room] boolean,
-                [idm] text UNIQUE,
+                [idm] text,
                 [date_time] datetime
             );`
     try{
@@ -71,11 +70,9 @@ const selectCardsByFcno = (fcno:string):Array<CardRow> => {
         throw err;
     }
 }
-const insert = (data: CardRow):ChangesInfo => {
-    const resultInfo:ChangesInfo ={
-        changes: -1,
-        lastInsertRowid: -1,
-    };
+const insert = (data: CardRow):TchangesInfo => {
+    const resultInfo = getChangeInfo();
+
     const rows = selectCardsByFcno(data.fcno);
     if(rows.length > 0){
         return resultInfo;
@@ -92,7 +89,7 @@ const insert = (data: CardRow):ChangesInfo => {
                         data.name, 
                         data.kana, 
                         data.mail, 
-                        (data.in_room)?1:0, 
+                        (data.in_room)? 1:0, 
                         data.idm
                     );
             console.log(`Inserted ${info.changes} rows with last ID ${info.lastInsertRowid} into cards`);
@@ -106,18 +103,21 @@ const insert = (data: CardRow):ChangesInfo => {
         throw err;
     }
 }
-const updateByFcno = (data: CardRow):ChangesInfo => {
+const updateByFcno = (data: CardRow):TchangesInfo => {
+    const resultInfo = getChangeInfo();
     const query = 
-     `UPDATE cards SET name=?, kana=?, mail=?, idm=?, date_time=datetime('now', 'localtime')
+     `UPDATE cards SET name=?, kana=?, mail=?, in_room=?, idm=?, date_time=datetime('now', 'localtime')
         WHERE fcno = ?`;
     try{
-        const resultInfo:ChangesInfo ={
-            changes: 0,
-            lastInsertRowid: -1,
-        };
         const updateQuery = db.prepare(query);
         const transaction = db.transaction(()=>{
-            const info = updateQuery.run(data.name,data.kana,data.mail,data.idm,data.fcno);
+            const info = updateQuery.run(
+                data.name,
+                data.kana,
+                data.mail,
+                (data.in_room)?1:0,
+                data.idm,
+                data.fcno);
             resultInfo.changes = info.changes;
         });
         transaction();
@@ -127,13 +127,10 @@ const updateByFcno = (data: CardRow):ChangesInfo => {
         throw err;
     }
 }
-const deleteByFcno = (fcno:string):ChangesInfo => {
+const deleteByFcno = (fcno:string):TchangesInfo => {
+    const resultInfo = getChangeInfo();
     const query = `DELETE FROM cards WHERE fcno = ?`;
     try{
-        const resultInfo:ChangesInfo ={
-            changes: 0,
-            lastInsertRowid: -1,
-        };
         const deleteQuery = db.prepare(query);
         const transaction = db.transaction(()=>{
             const info = deleteQuery.run(fcno);
@@ -149,8 +146,8 @@ const deleteByFcno = (fcno:string):ChangesInfo => {
 
 }
 export const cards = {
-    dropCards: dropCards,
-    createCards: createCards,
+    dropTable: dropTable,
+    createTable: createTable,
     selectAll: selectAll,
     selectCardsByIdm: selectCardsByIdm,
     selectCardsByFcno: selectCardsByFcno,
