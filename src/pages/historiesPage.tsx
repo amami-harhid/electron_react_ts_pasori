@@ -22,7 +22,7 @@ interface History {
 // テーブルに渡すデータ
 const data: History[] = [];
 
-export async function Histories() {
+export async function HistoriesPage() {
 
   // カラムの定義
   const columns = useMemo<MRT_ColumnDef<History>[]>(

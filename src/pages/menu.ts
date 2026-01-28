@@ -75,6 +75,18 @@ export default class MenuBuilder {
 
         ]
       },
+      {
+        label: 'Help',
+        submenu: [
+          {
+            label: '開発者ツール',
+            click: () => {
+              this.mainWindow.webContents.toggleDevTools();
+            },
+          },
+        ],
+      },
+
     ];
 
     return templateDefault;
