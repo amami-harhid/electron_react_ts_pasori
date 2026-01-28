@@ -2,7 +2,10 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 const electronApiNavigate = {
   onNavigate: (callback:CallableFunction) => {
-    ipcRenderer.on("navigate", (_, path) => callback(path))
+    ipcRenderer.on("navigate", (_, path) => {
+      console.log('path=',path);
+      callback(path)
+    })
   },
 };
 
